@@ -1,8 +1,6 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-console.log(galleryItems);
-
 const gallery = document.querySelector(".gallery");
 const createGalleryMarkup = createGallery(galleryItems);
 
@@ -30,10 +28,3 @@ let lightbox = new SimpleLightbox('.gallery a', {
     captionDelay: 250,
 
 });
-
-gallery.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (e.target.nodeName !== "IMG") {
-      return;
-    }
-  });
