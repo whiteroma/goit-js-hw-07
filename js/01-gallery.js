@@ -1,17 +1,43 @@
-// Выполняй это задание в файлах 01-gallery.html и 01-gallery.js. Разбей его на несколько подзадач:
-
-// Создание и рендер разметки по массиву данных galleryItems и предоставленному шаблону элемента галереи.
-// Реализация делегирования на div.gallery и получение url большого изображения.
-// Подключение скрипта и стилей библиотеки модального окна basicLightbox. 
-// Используй CDN сервис jsdelivr и добавь в проект ссылки на минифицированные (.min) файлы библиотеки.
-// Открытие модального окна по клику на элементе галереи. Для этого ознакомься с документацией и примерами.
-// Замена значения атрибута src элемента <img> в модальном окне перед открытием.
-//  Используй готовую разметку модального окна с изображением из примеров библиотеки basicLightbox.
-
-
-
-
-import { galleryItems } from './gallery-items.js';
+import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
 console.log(galleryItems);
+
+const gallery = document.querySelector(".gallery");
+const createGalleryMarkup = createGallery(galleryItems);
+
+function createGallery(galleryItems) {
+  return galleryItems
+    .map(({ original, preview, description }) => {
+      return `
+        <div class="gallery__item">
+            <a href="${original}" class="gallery__link">
+                <img src="${preview}" data-source="${original}" alt="${description}" class="gallery__image">
+             </a>
+        </div>`;
+    })
+    .join("");
+}
+
+gallery.insertAdjacentHTML("beforeend", createGalleryMarkup);
+
+gallery.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (e.target.nodeName !== "IMG") {
+    return;
+  }
+
+  const imgs = e.target.dataset.source;
+
+  const instance = basicLightbox.create(`
+    <img src="${imgs}" class="gallery__image">
+`);
+
+  instance.show();
+
+  gallery.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      instance.close();
+    }
+  });
+});
